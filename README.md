@@ -1,5 +1,7 @@
-# danmu
+# Danmu-Player
  一个苹果cms的弹幕播放器插件
+
+交流群：[668440223](https://jq.qq.com/?_wv=1027&k=bnGPrlub)
 
 #### 预览
 
