@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MacCms-Dplayer弹幕播放器</title>
+</head>
+<body>
+<div id="dplayer"></div>
+<script src="/static/addons/danmu/js/hls.min.js"></script>
+<script src="/static/addons/danmu/js/DPlayer.min.js"></script>
+
+<script type="text/javascript">
+    const dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        screenshot: true,
+        video: {
+            url: '{video_url}',
+            type: 'customHls',
+            customType: {
+                customHls: function (video, player) {
+                    const hls = new Hls();
+                    hls.loadSource(video.src);
+                    hls.attachMedia(video);
+                },
+            },
+        },
+        danmaku: {
+            id: '{video_url}',
+            api: '/index.php/danmu/',
+        },
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{$title} - {:lang('admin/public/head/title')}</title>
+    <link rel="stylesheet" href="__STATIC__/addons/danmu/layui/css/layui.css">
+
+    <script type="text/javascript" src="__STATIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__STATIC__/addons/danmu/layui/layui.js"></script>
+    <script>
+        var ROOT_PATH = "__ROOT__", ADMIN_PATH = "{$_SERVER['SCRIPT_NAME']}", MAC_VERSION = "v10";
+    </script>
+</head>
+<body>
+
+<form class="layui-form" style="margin-top: 30px">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="layui-input-block">
+                <input id="key" type="text" name="identity" lay-verify="identity" placeholder="" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button id="find" type="button" class="layui-btn layui-btn-sm layui-btn-normal">查询弹幕</button>
+        </div>
+        <div class="layui-inline">
+            <button id="del_file" type="button" class="layui-btn layui-btn-sm layui-btn-normal">删除禁用时的冲突文件</button>
+        </div>
+    </div>
+</form>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">删除选中行数据</button>
+        <!--        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+        <!--        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
+
+    </div>
+
+</script>
+
+<script type="text/html" id="barDemo">
+    <!--    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+
+<script>
+
+    function empty(s) {
+        if(s == undefined){
+            return false;
+        }
+
+        if($.trim(s) == ""){
+            return false;
+        }
+        return true;
+    }
+
+    layui.use('table', function () {
+        var table = layui.table;
+        var $ = layui.$;
+        const rutl = ADMIN_PATH + '/admin/danmu/';
+        const dataUrl = ADMIN_PATH + '/admin/danmu/getDanmu';
+        table.render({
+            elem: '#test'
+            , url: dataUrl
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , title: '用户数据表'
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', width: 80, fixed: 'left'}
+                , {field: 'vid', title: '视频地址', width: 180}
+                , {field: 'uid', title: '用户id', width: 120}
+                , {field: 'author', title: '弹幕作者', width: 120}
+                , {field: 'text', title: '弹幕内容', width: 177}
+                , {field: 'color', title: '弹幕颜色', width: 120}
+                , {field: 'type', title: '弹幕类型', width: 120}
+                , {field: 'time', title: '弹幕出现时间', width: 120}
+                , {field: 'ip', title: '弹幕发送ip', width: 140}
+                , {field: 'create_time', title: '弹幕创建日期', width: 135}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 75}
+            ]]
+
+            , page: true
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    var len = data.length;
+                    var ids = data[0]['id'];
+                    for (var i = 1; i < len; i++) {
+                        ids += (';' + data[i]['id']);
+                    }
+                    console.log(ids);
+                    $.ajax({
+                        url: rutl + 'delDanmu',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {d: ids},
+                        success: function (d) {
+                            if (d.code == 1) {
+                                layer.msg(d.msg);
+                            } else if (d.code == 0) {
+                                layer.msg("删除成功");
+                                table.reload('test');
+                            }
+                        }
+                    });
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            }
+            ;
+        });
+
+        $("#find").click(function (e) {
+            var k = $("#key").val();
+            if(empty(k)){
+                table.reload('test', {
+                    url: rutl+'findDanmu/?key='+k,
+                });
+            }else {
+                table.reload('test', {
+                    url:dataUrl
+                });
+            }
+        })
+
+        $("#del_file").click(function (e) {
+            $.ajax({
+                url: rutl + 'delFile',
+                success: function (data) {
+                    layer.msg(data.msg);
+                }
+            })
+        })
+
+
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                $.ajax({
+                    url: rutl + 'delDanmu',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {d: obj.data.id},
+                    success: function (d) {
+                        if (d.code == 1) {
+                            layer.msg(d.msg);
+                        } else if (d.code == 0) {
+                            layer.msg("删除成功");
+                            table.reload('test')
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

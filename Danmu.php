@@ -38,6 +38,37 @@ class Danmu extends Addons	// 需继承thinkaddonsAddons类
             Db::execute($sql);
         }
 
+        $menus = @include MAC_ADMIN_COMM . 'auth.php';
+        $player = config('vodplayer');
+
+        $player['danmuplayer'] = array(
+            'status' => '1',
+            'sort' => '1800',
+            'from' => 'danmuplayer',
+            'show' => '弹幕播放器',
+            'des' => '基于dplayer的弹幕播放器，支持m3u8和mp4',
+            'parse' => 'index.php/danmu/player',
+            'ps' => '1',
+            'tip' => '无需安装任何插件',
+            'id' => 'danmuplayer',
+        );
+
+
+
+        $menus['11']['sub']['danmu'] = array("show"=>1,'name' => '弹幕管理器', 'controller' => 'danmu', 'action' => 'index', 'param'=>'');
+        mac_arr2file( APP_PATH . 'admin/common/auth.php', $menus);
+        mac_arr2file( APP_PATH . 'extra/vodplayer.php', $player);
+        return true;
+    }
+
+    public function disable() {
+        $player = config('vodplayer');
+        $menus = @include MAC_ADMIN_COMM . 'auth.php';
+        unset($menus['11']['sub']['danmu']);
+        unset($player['danmuplayer']);
+        mac_arr2file( APP_PATH . 'admin/common/auth.php', $menus);
+        mac_arr2file( APP_PATH . 'extra/vodplayer.php', $player);
+        return true;
     }
 
 
