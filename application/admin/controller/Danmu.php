@@ -10,7 +10,7 @@ class Danmu extends Base{
     }
 
     public function Index(){
-        return $this->fetch('admin@danmu/index');
+        return $this->fetch('admin@Danmu/index');
     }
 
     public function delDanmu(){
