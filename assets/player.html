@@ -15,14 +15,14 @@
         screenshot: true,
         video: {
             url: '{$video_url}',
-            type: 'customHls',
-            customType: {
-                customHls: function (video, player) {
-                    const hls = new Hls();
-                    hls.loadSource(video.src);
-                    hls.attachMedia(video);
-                },
-            },
+            // type: 'customHls',
+            // customType: {
+            //     customHls: function (video, player) {
+            //         const hls = new Hls();
+            //         hls.loadSource(video.src);
+            //         hls.attachMedia(video);
+            //     },
+            // },
         },
         danmaku: {
             id: '{$video_url}',
