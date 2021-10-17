@@ -14,7 +14,7 @@
         container: document.getElementById('dplayer'),
         screenshot: true,
         video: {
-            url: '{video_url}',
+            url: '{$video_url}',
             type: 'customHls',
             customType: {
                 customHls: function (video, player) {
@@ -25,7 +25,7 @@
             },
         },
         danmaku: {
-            id: '{video_url}',
+            id: '{$video_url}',
             api: '/index.php/danmu/',
         },
     });
