@@ -11,7 +11,7 @@ return array (
       'on' => '启用',
       'off' => '关闭',
     ),
-    'value' => 'off',
+    'value' => 'on',
     'rule' => 'required',
     'msg' => '',
     'tip' => '启用后只有登陆才能看到弹幕',
@@ -32,5 +32,22 @@ return array (
     'tip' => '弹幕屏蔽词,用英文;隔开',
     'ok' => '',
     'extend' => 'style="height: 150px;"',
+  ),
+  2 => 
+  array (
+    'name' => 'login_send',
+    'title' => '石否启用登陆才能发送弹幕',
+    'type' => 'radio',
+    'content' => 
+    array (
+      'on' => '启用',
+      'off' => '关闭',
+    ),
+    'value' => 'on',
+    'rule' => 'required',
+    'msg' => '',
+    'tip' => '启用后只有登陆才能发送弹幕',
+    'ok' => '',
+    'extend' => '',
   ),
 );

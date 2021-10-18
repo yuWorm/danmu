@@ -20,7 +20,8 @@ class Danmu extends Base {
             }
             return json_encode(model('Danmuku')->getDanmuList($id));
         } else {
-            if (!$this->isLogin()) return json_encode(['code' => 1, 'msg' => '登陆才能发送弹幕']);
+            if($this->danmu_config[2]['value'] == 'on')
+                if (!$this->isLogin()) return json_encode(['code' => 1, 'msg' => '登陆才能发送弹幕']);
             $lock = cookie('send_danmu_loc');
 //            if (!empty($lock)) return json_encode(['code'=>1, 'msg'=>'您发弹幕的速度太快了呢']);
             return json_encode($this->store());

@@ -47,7 +47,7 @@ class Danmu extends Addons	// 需继承thinkaddonsAddons类
             'from' => 'danmuplayer',
             'show' => '弹幕播放器',
             'des' => '基于dplayer的弹幕播放器，支持m3u8和mp4',
-            'parse' => 'index.php/danmu/player?url=',
+            'parse' => '/index.php/danmu/player?url=',
             'ps' => '1',
             'tip' => '无需安装任何插件',
             'id' => 'danmuplayer',
