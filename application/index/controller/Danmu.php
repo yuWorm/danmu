@@ -32,7 +32,8 @@ class Danmu extends Base {
     public function player() {
         $url = $this->request->get('url');
         $this->assign("video_url", $url);
-        return $this->fetch(ROOT_PATH.'static/addons/danmu/player.html',[],['__JS__'=>'/static/addons/danmu/js/']);
+        return $this->fetch(ROOT_PATH.'static/addons/danmu/p2p_player.html');
+//        return $this->fetch(ROOT_PATH.'static/addons/danmu/player.html',[],['__JS__'=>'/static/addons/danmu/js/']);
     }
 
     public function store() {

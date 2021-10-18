@@ -36,21 +36,19 @@ class Danmu extends Base{
     }
 
     public function delFile(){
-        $ctrl_path = APP_PATH.'admin/controller/Danmu.php';
-        $view_path = APP_PATH.'admin/view/Danmu/';
-        if (file_exists($ctrl_path)){
-            $cs = unlink($ctrl_path);
-        }
-        if (file_exists($view_path)){
-            $vs = $this->deldir($view_path);
-        }
+        $p = [
+            APP_PATH.'admin/controller/Danmu.php',
+            APP_PATH.'admin/view/Danmu/',
+            APP_PATH.'index/controller/Danmu.php',
+            APP_PATH.'common/model/Danmuku.php',
+//            __DIR__.'/static/addons/danmu/'
+        ];
         $msg = '';
-        $msg = $vs ? '删除'.$ctrl_path.'成功' : ($msg.'删除'.$ctrl_path.'失败，请尝试手动删除');
-        $msg = $vs ? '\n删除'.$view_path.'成功' : ($msg.'\n删除'.$view_path.'失败，请尝试手动删除');
-        if($vs && $cs){
-            $msg = '删除成功,可以去应用中心禁用插件了';
+        foreach ($p as $v){
+            $s = $this->deldir($v);
+            $msg .= $s ? '删除'.$v.'成功' : ($msg.'删除'.$v.'失败，请尝试手动删除\n');
         }
-        return json_encode(['code'=>0, 'msg'=>$msg]);
+        return json(["code"=>0, "msg"=>$msg]);
     }
 
     public function deldir($path){
@@ -74,6 +72,8 @@ class Danmu extends Base{
                     }
                 }
             }
+        }else{
+            return unlink($path);
         }
         //删除目录
         return rmdir($path);
